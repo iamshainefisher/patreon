@@ -76,3 +76,4 @@ To change the width, text size or margins, edit `WIDTH`, `SIZE` and `MARGIN` at 
 ## Fonts
 
 The published images use the free Inter font (Google Fonts). Without it, the images use DejaVu Sans instead.
+# patreon
