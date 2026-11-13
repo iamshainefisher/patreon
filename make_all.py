@@ -5,6 +5,7 @@
     python3 make_all.py --check         run the music checks and stop
     python3 make_all.py --out mydir     use another output folder
     python3 make_all.py --tables        just the table images
+    python3 make_all.py --about         just the Patreon About text (output/about.txt)
 
 Table images come from the doc's tabs exported as Markdown into doc_export/ (see tables.py).
 
@@ -44,11 +45,13 @@ def main():
     ap.add_argument('--only', nargs='*', help='post codes to build, e.g. F6 E1')
     ap.add_argument('--check', action='store_true', help='run the checks only')
     ap.add_argument('--tables', action='store_true', help='build only the table images')
+    ap.add_argument('--about', action='store_true', help='write only the Patreon About text')
     ap.add_argument('--doc', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'doc_export'),
                     help='folder of the doc tabs exported as Markdown (default: doc_export)')
     a = ap.parse_args()
 
-    problems = theory.check_all() + check_catalogue()
+    import about
+    problems = theory.check_all() + check_catalogue() + about.problems(POSTS)
     if problems:
         print('Stopped: these need fixing before anything is drawn:')
         for p in problems:
@@ -58,6 +61,8 @@ def main():
     if a.check:
         return
 
+    if a.about:
+        build_about(a); return
     if a.tables:
         build_tables(a); return
 
@@ -96,6 +101,16 @@ def main():
     print(f'Made {len(made)} images in {diagrams} and the tabs in {tabs_file} ({time.time() - t0:.0f} s).')
     if not a.only:
         build_tables(a)
+        build_about(a)
+
+
+def build_about(a):
+    import about
+    os.makedirs(a.out, exist_ok=True)
+    path = os.path.join(a.out, 'about.txt')
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(about.about_text(POSTS))
+    print(f'Wrote the Patreon About text to {path}.')
 
 
 def build_tables(a):

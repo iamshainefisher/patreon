@@ -22,6 +22,7 @@ That checks all the music, then writes:
 - `output/diagrams/`: every post's diagram sheet, the E1 arpeggio sheets and the summary charts (51 images)
 - `output/tabs.md`: every tab for every post, in publishing order
 - `output/tables/`: every table in the series doc as an image (55 so far), all 2400 px wide
+- `output/about.txt`: the Patreon About section, ready to paste
 
 Other options:
 
@@ -31,6 +32,7 @@ Other options:
 | `python3 make_all.py --check` | Runs the checks and draws nothing |
 | `python3 make_all.py --out somewhere` | Writes to another folder |
 | `python3 make_all.py --tables` | Builds just the table images |
+| `python3 make_all.py --about` | Writes just the Patreon About text |
 
 On Windows, type `python` instead of `python3`.
 
@@ -42,6 +44,7 @@ On Windows, type `python` instead of `python3`.
 | `theory.py` | The music: note spellings, the seven modes in E and B, chord shapes, triads, arpeggio and scale positions, and the checks |
 | `draw.py` | How everything is drawn: house colours, post sheets, the F6 grid, E1 arpeggio sheets, summary charts |
 | `tabs.py` | How tabs are written: chord, scale and arpeggio tabs |
+| `about.py` | The Patreon About section: fixed wording, plus one roadmap line per part |
 | `tables.py` | Turns every table in the doc into an image of the same width |
 | `doc_export/` | The doc's tabs saved as Markdown: the source for the table images |
 | `make_all.py` | The one command that checks and builds everything |
@@ -72,6 +75,10 @@ Each table is drawn at its natural size in the house colours: a light blue heade
 A post's table is named like its diagram sheet, with `-table` on the end, for example `F3-chords-in-e-table.png` beside `F3-chords-in-e.png`. A post with two tables gets `-table-1` and `-table-2`. Tables that belong to no single post are named by their tab and heading, for example `calendar-exercises-table.png`, `roadmap-modes-table.png` or `glossary-table.png`.
 
 To change the width, text size or margins, edit `WIDTH`, `SIZE` and `MARGIN` at the top of `tables.py`.
+
+## The Patreon About text
+
+`about.py` writes `output/about.txt` from the post list, so the roadmap parts, their start dates and the recap line always match the posts. A new post needs nothing extra. A new sub-series needs one line in `PARTS`, and a new series one entry in `SERIES`; the checks stop and say so if either is missing. The fixed wording (intro, what's in each post, start here) sits at the top of `about.py` and can be edited there.
 
 ## Fonts
 

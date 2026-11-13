@@ -52,6 +52,7 @@ One folder, theory\_in\_e, rebuilds every diagram and tab with a single command:
 | tabs.py | Chord, scale and arpeggio tabs | A new kind of tab |
 | tables.py | Turns every table in this doc into an image, all 2400 px wide with white padding | To change the table style, width or text size |
 | doc\_export/ | This doc's tabs saved as Markdown, the source for the table images | Whenever a table in the doc changes: export the tab again |
+| about.py | The Patreon About section, with the roadmap and dates worked out from the post list | A new sub-series or series: add its one-line description |
 | make\_all.py | Checks, then builds everything into output/ | Rarely |
 
 ## Ideas for future series
