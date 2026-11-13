@@ -69,11 +69,10 @@ Before drawing, the scripts confirm that:
 
 Each table is drawn at its natural size in the house colours: a light blue header row, bold first column and light bands on alternate rows. It is then centred on a white canvas 2400 px wide, the same width as the diagram sheets, so every table image is the same width. Tables too wide for the canvas wrap their text. Links keep their text and lose the address.
 
-Files are named by tab, position and heading, for example `main-07-f3-chords-in-the-key-of-e.png` or `calendar-03-exercises.png`. Numbers follow the order in the doc, so adding a table early in a tab renumbers the ones after it.
+A post's table is named like its diagram sheet, with `-table` on the end, for example `F3-chords-in-e-table.png` beside `F3-chords-in-e.png`. A post with two tables gets `-table-1` and `-table-2`. Tables that belong to no single post are named by their tab and heading, for example `calendar-exercises-table.png`, `roadmap-modes-table.png` or `glossary-table.png`.
 
 To change the width, text size or margins, edit `WIDTH`, `SIZE` and `MARGIN` at the top of `tables.py`.
 
 ## Fonts
 
 The published images use the free Inter font (Google Fonts). Without it, the images use DejaVu Sans instead.
-# patreon

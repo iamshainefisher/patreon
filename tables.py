@@ -117,14 +117,32 @@ def _slug(s):
     return re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-')[:60].strip('-')
 
 
-def _name(t):
+def post_slugs():
+    """Post code -> the name its diagram sheet uses, so a post's tables sit beside its diagrams."""
+    from posts import POSTS
+    out = {}
+    for p in POSTS:
+        sheet = p.get('sheet')
+        if isinstance(sheet, dict): out[p['code']] = sheet['slug']
+        elif isinstance(sheet, tuple): out[p['code']] = sheet[1]
+        elif sheet == 'mode_chords': out[p['code']] = 'chords-in-each-mode'
+        elif sheet == 'arpeggios': out[p['code']] = 'arpeggios'
+        else: out[p['code']] = _slug(p['title'])
+    return out
+
+
+def _name(t, slugs):
+    """F3-chords-in-e-table for a post's table; calendar-exercises-table and so on for the rest."""
+    m = re.match(r'([A-Z]{1,2}\d+):', t['section'] or '')
+    if t['heading'].lower().startswith('post draft') and m:
+        code = m.group(1)
+        return f"{code}-{slugs.get(code) or _slug(t['section'][len(code) + 1:])}"
     short = TAB_NAMES.get(t['tab'], _slug(t['tab']))
-    label = t['section'] or t['heading']
-    if t['heading'].lower().startswith('post draft') and t['section']:
-        label = t['section']
-    elif t['section'] and t['heading'] and short == 'main':
-        label = f"{t['heading']} {t['section']}"
-    return short, re.sub(r'-in-e$', '', _slug(label))
+    label = t['section'] if t['section'] and short != 'main' else ' '.join(x for x in (t['heading'], t['section']) if x)
+    label = _slug(re.sub(r'\([^)]*\)', '', label))          # drop "(6 posts)" and the like
+    if short == 'main':
+        return label
+    return short if label in ('', short) else f'{short}-{label}'
 
 
 def _wrap(s, width, bold):
@@ -216,11 +234,15 @@ def all_tables(export_dir):
 
 def build(export_dir, out_dir):
     os.makedirs(out_dir, exist_ok=True)
-    made = []; n = {}
+    slugs = post_slugs()
     tables = all_tables(export_dir)
-    for t in tables:
-        short, label = _name(t)
-        n[short] = n.get(short, 0) + 1
-        base = f'{short}-{n[short]:02d}' + (f'-{label}' if label and label != short else '')
+    names = [_name(t, slugs) for t in tables]
+    made = []; k = {}
+    for t, base in zip(tables, names):
+        if names.count(base) > 1:                              # M1 has two tables: -table-1, -table-2
+            k[base] = k.get(base, 0) + 1
+            base = f'{base}-table-{k[base]}'
+        else:
+            base = f'{base}-table'
         made.append(render(t, os.path.join(out_dir, base + '.png')))
     return made
